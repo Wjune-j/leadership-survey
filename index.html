@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>리더십 스타일 설문 · KMBA 조직행동론</title>
+<style>
+  :root{
+    --bg:#F6F5F1; --card:#FFFFFF; --ink:#1C2430; --sub:#5B6573; --line:#E3E0D8;
+    --accent:#1F5C4F; --accent-soft:#E3EEEA; --warn:#9A5B13; --warn-soft:#FBF1E3;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",sans-serif;
+    word-break:keep-all;line-height:1.6;font-size:16px}
+  .wrap{max-width:480px;margin:0 auto;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;padding:0 20px}
+  header{position:sticky;top:0;background:var(--bg);padding:14px 0 10px;z-index:2}
+  .bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+  .meta{display:flex;justify-content:space-between;font-size:13px;color:var(--sub);margin-top:6px}
+  main{flex:1;padding:8px 0 24px}
+  .screen{display:none;animation:fade .2s ease}
+  .screen.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  h1{font-size:23px;line-height:1.4;margin:10px 0 8px}
+  h2{font-size:19px;line-height:1.45;margin:6px 0 10px}
+  p{margin:0 0 12px}
+  .eyebrow{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.02em}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px 6px;margin:12px 0}
+  .card h3{font-size:15px;margin:0 0 8px}
+  .card ul{margin:0 0 10px;padding-left:18px}
+  .card li{margin-bottom:6px}
+  .note{background:var(--warn-soft);border-radius:12px;padding:12px 14px;font-size:14.5px;color:#5A3A10;margin:12px 0}
+  .muted{color:var(--sub);font-size:14px}
+  .roles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 4px}
+  .opt{border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:14px 10px;font-size:16px;font-weight:600;color:var(--ink);cursor:pointer;text-align:center}
+  .opt.sel{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+  .check{display:flex;gap:10px;align-items:flex-start;margin:14px 0 4px;font-size:15px}
+  .check input{width:22px;height:22px;margin-top:2px;accent-color:var(--accent);flex:none}
+  footer{position:sticky;bottom:0;background:linear-gradient(transparent,var(--bg) 30%);padding:18px 0 calc(16px + env(safe-area-inset-bottom));display:flex;gap:10px}
+  .btn{flex:1;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:700;cursor:pointer}
+  .btn.primary{background:var(--accent);color:#fff}
+  .btn.primary:disabled{background:#AEB9B5;cursor:not-allowed}
+  .btn.ghost{background:transparent;color:var(--sub);flex:0 0 88px;border:1.5px solid var(--line)}
+  /* LPC item */
+  .q-num{font-size:13px;color:var(--sub);margin-bottom:4px}
+  .pair{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin:22px 0 10px}
+  .pair b{font-size:20px;line-height:1.3;max-width:48%}
+  .pair b:last-child{text-align:right}
+  .scale{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
+  .scale button{aspect-ratio:1/1.25;border:1.5px solid var(--line);background:var(--card);border-radius:10px;font-size:16px;font-weight:600;color:var(--ink);cursor:pointer;padding:0}
+  .scale button.sel{background:var(--accent);border-color:var(--accent);color:#fff}
+  .scale-hint{display:flex;justify-content:space-between;font-size:12.5px;color:var(--sub);margin-top:6px}
+  .remind{margin-top:22px;font-size:14px;color:var(--sub);background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:10px 12px}
+  /* situation */
+  .sit{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0}
+  .sit .when{font-size:14px;font-weight:700;color:var(--accent);margin-bottom:8px}
+  .sit .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .sit .opt{font-size:15px;padding:12px 6px;font-weight:600}
+  .sit .opt small{display:block;font-weight:400;font-size:12.5px;color:var(--sub);margin-top:2px}
+  .sit .opt.sel small{color:var(--accent)}
+  .result-link{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:13px;word-break:break-all;color:var(--sub);margin:10px 0}
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);border-radius:12px;overflow:hidden}
+  th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left}
+  th{background:#EFEDE7;font-weight:600}
+  .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:20px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+  .toast.on{opacity:.92}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header id="hdr">
+    <div class="bar"><i id="prog"></i></div>
+    <div class="meta"><span id="stage">설문 안내</span><span id="count"></span></div>
+  </header>
+
+  <main>
+    <!-- 0. 시작 -->
+    <section class="screen" id="s-intro">
+      <div class="eyebrow">고려대학교 KMBA · 조직행동론 조별과제</div>
+      <h1>리더십 스타일 설문에<br>참여해 주셔서 감사합니다</h1>
+      <p>이 설문은 <b>리더가 일과 사람을 바라보는 방식</b>과, 리더가 <b>어떤 상황에 놓여 있었는지</b>를 함께 살펴보기 위한 것입니다. 리더십 연구에서 오래 쓰여 온 설문을 바탕으로 했습니다.</p>
+
+      <div class="card">
+        <h3>왜 이 설문을 하나요?</h3>
+        <ul>
+          <li>리더십 이론 중에는 <b>"좋은 리더십은 정해져 있지 않고, 리더의 성향과 그가 처한 상황이 맞을 때 효과가 난다"</b>고 보는 관점이 있습니다.</li>
+          <li>인터뷰에서 나눈 회사의 이야기를 이 관점으로 해석하려면, 말씀만이 아니라 <b>간단한 측정값</b>이 함께 있어야 분석이 탄탄해집니다.</li>
+          <li>그래서 대표님과 COO님 두 분께 같은 설문을 각자 부탁드립니다.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>무엇을, 어떻게 묻나요? (약 7분)</h3>
+        <ul>
+          <li><b>1부 · 18문항</b>: <b>P사에서</b> 이끌어 온 직원 중 함께 일하기 가장 어려웠던 한 사람을 떠올리고, 그분을 형용사 짝으로 평가합니다.</li>
+          <li><b>2부 · 3문항</b>: '합병 직후'와 '현재', 두 시점의 <b>P사</b> 조직 상황을 고릅니다.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>미리 알아 두실 점</h3>
+        <ul>
+          <li><b>정답도, 좋고 나쁜 점수도 없습니다.</b> 능력이나 성과를 평가하는 설문이 아닙니다.</li>
+          <li>떠올리신 분의 <b>이름은 묻지 않습니다.</b></li>
+          <li>결과는 과제 분석에만 쓰며, 보고서에는 회사와 두 분 모두 <b>가명</b>('P사', '현 CEO', '현 COO')으로만 표기합니다.</li>
+          <li>응답 내용은 어디에도 저장되지 않고, 마지막 화면의 <b>결과 링크</b>를 보내주셔야만 저희에게 전달됩니다.</li>
+          <li>원하시면 분석이 끝난 뒤 결과 요약을 공유해 드리겠습니다.</li>
+        </ul>
+      </div>
+
+      <h2 style="margin-top:20px">응답하시는 분을 선택해 주세요</h2>
+      <div class="roles">
+        <button class="opt" data-role="CEO">대표 (CEO)</button>
+        <button class="opt" data-role="COO">COO</button>
+      </div>
+      <label class="check"><input type="checkbox" id="agree"> 위 안내를 읽었고, 설문에 참여하겠습니다.</label>
+    </section>
+
+    <!-- 1. 1부 안내 -->
+    <section class="screen" id="s-guide1">
+      <div class="eyebrow">1부 · 18문항</div>
+      <h1>P사에서 이끌어 온 직원 중<br>함께 일하기 가장 어려웠던<br>한 사람을 떠올려 주세요</h1>
+      <div class="card">
+        <ul>
+          <li><b>P사에서 함께 일한 직원</b> 중에서 골라 주세요. 합병 이후 이미 회사를 떠난 분이어도 괜찮습니다.</li>
+          <li><b>개인적으로 싫은 사람이 아니라</b>, <b>함께 일을 해내기가 가장 어려웠던 사람</b>입니다.</li>
+          <li>이름은 적지 않으셔도 됩니다. 머릿속으로만 떠올려 주세요.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>응답 방법</h3>
+        <ul>
+          <li>형용사 짝을 보고, 그분이 <b>어느 쪽에 더 가까운지</b> 1~8 중에서 고릅니다.</li>
+          <li>양 끝으로 갈수록 그 단어에 가깝습니다. <b>좌우의 단어 위치는 문항마다 바뀝니다</b>.</li>
+          <li>오래 고민하지 마시고 <b>첫 느낌대로</b> 빠르게 답해 주세요.</li>
+        </ul>
+      </div>
+      <div class="note">설문 중간에 잠시 멈춰도, 같은 휴대폰과 브라우저라면 이어서 하실 수 있습니다.</div>
+    </section>
+
+    <!-- 2. LPC 문항 (동적) -->
+    <section class="screen" id="s-item">
+      <div class="q-num" id="qnum"></div>
+      <h2>떠올리신 그분은 어느 쪽에 더 가깝나요?</h2>
+      <div class="pair"><b id="wl"></b><b id="wr"></b></div>
+      <div class="scale" id="scale"></div>
+      <div class="scale-hint"><span>← 왼쪽 단어에 가까움</span><span>오른쪽 단어에 가까움 →</span></div>
+      <div class="remind">기준: <b>P사에서 함께 일하기 가장 어려웠던 직원</b> 한 사람</div>
+    </section>
+
+    <!-- 3. 2부 안내 -->
+    <section class="screen" id="s-guide2">
+      <div class="eyebrow">2부 · 3문항</div>
+      <h1>이번에는 조직 상황을<br>두 시점으로 여쭙니다</h1>
+      <div class="card">
+        <ul>
+          <li><b>합병 직후</b>: 두 회사가 합쳐지고 현 경영진이 합류한 뒤 <b>첫 몇 달</b>을 떠올려 주세요.</li>
+          <li><b>현재</b>: 재채용 이후 <b>지금의 조직</b>입니다.</li>
+          <li>회사 전체가 아니라 <b>응답하시는 분이 직접 이끄는 구성원들</b>을 기준으로 답해 주세요.</li>
+        </ul>
+      </div>
+      <div class="note">두 분의 답이 서로 달라도 괜찮습니다. 같은 조직도 자리에 따라 다르게 보이는 것이 자연스럽고, 그 차이도 의미 있는 자료가 됩니다.</div>
+    </section>
+
+    <!-- 4. 상황 문항 (동적) -->
+    <section class="screen" id="s-sit">
+      <div class="q-num" id="snum"></div>
+      <h2 id="stitle"></h2>
+      <p class="muted" id="sdesc"></p>
+      <div class="sit"><div class="when">합병 직후</div><div class="two" id="sit-m"></div></div>
+      <div class="sit"><div class="when">현재</div><div class="two" id="sit-n"></div></div>
+    </section>
+
+    <!-- 5. 완료 -->
+    <section class="screen" id="s-done">
+      <div class="eyebrow">응답 완료</div>
+      <h1>감사합니다!<br>마지막으로 결과 링크를 보내주세요</h1>
+      <p>아래 버튼을 눌러 링크를 복사한 뒤, <b>카카오톡 등으로 설문을 요청드린 원우에게</b> 보내주시면 됩니다. 링크를 보내셔야 응답이 전달됩니다.</p>
+      <button class="btn primary" id="copy" style="width:100%">결과 링크 복사하기</button>
+      <button class="btn ghost" id="share" style="width:100%;margin-top:10px;flex:none">공유하기 (카카오톡 등)</button>
+      <div class="result-link" id="rlink"></div>
+      <p class="muted">복사가 되지 않으면 위의 주소를 길게 눌러 복사해 주세요.</p>
+    </section>
+
+    <!-- 6. 결과 보기 (연구자용) -->
+    <section class="screen" id="s-view">
+      <div class="eyebrow">응답 결과 확인</div>
+      <h1 id="vtitle"></h1>
+      <p class="muted" id="vtime"></p>
+      <h2>1부 · 18문항 (8 = 긍정 쪽, 역문항 환산 완료)</h2>
+      <table id="vlpc"></table>
+      <h2 style="margin-top:20px">2부 · 상황</h2>
+      <table id="vsit"></table>
+      <p class="muted" style="margin-top:14px">해석은 분석 단계에서 진행합니다.</p>
+    </section>
+
+    <section class="screen" id="s-bad">
+      <h1>결과 링크를 읽을 수 없습니다</h1>
+      <p>링크가 중간에 잘렸을 수 있습니다. 받은 주소 전체를 다시 확인해 주세요.</p>
+    </section>
+  </main>
+
+  <footer id="nav">
+    <button class="btn ghost" id="back">이전</button>
+    <button class="btn primary" id="next" disabled>시작하기</button>
+  </footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  // 18 items: [부정, 긍정]. 짝수 번째 문항은 긍정 단어를 왼쪽에 표시(역문항), 저장은 항상 8 = 긍정.
+  var ITEMS = [
+    ["불쾌한","유쾌한"],["비우호적인","우호적인"],["거부하는","수용하는"],["긴장된","편안한"],
+    ["거리감 있는","가까운"],["차가운","따뜻한"],["적대적인","지지하는"],["지루한","흥미로운"],
+    ["다투기 좋아하는","조화로운"],["우울한","쾌활한"],["경계하는","개방적인"],["뒤에서 헐뜯는","충실한"],
+    ["믿을 수 없는","믿을 수 있는"],["배려 없는","배려하는"],["심술궂은","상냥한"],["까다로운","원만한"],
+    ["진실하지 않은","진실한"],["불친절한","친절한"]
+  ];
+  var SIT = [
+    {k:"rel", t:"리더와 구성원의 관계", d:"구성원들이 응답자님을 신뢰하고 기꺼이 따랐나요?",
+     o:[["G","좋음","신뢰하고 잘 따름"],["B","좋지 않음","불신·저항이 있음"]]},
+    {k:"task", t:"업무의 명확성", d:"구성원들의 업무가 절차·기준으로 분명하게 정해져 있었나요?",
+     o:[["H","명확함","무엇을 어떻게 할지 정해짐"],["L","모호함","그때그때 판단해야 함"]]},
+    {k:"pow", t:"리더의 공식 권한", d:"채용·평가·보상·징계를 응답자님이 실질적으로 결정할 수 있었나요?",
+     o:[["S","강함","직접 결정할 수 있음"],["W","약함","제약이 많음"]]}
+  ];
+  var KEY = "lpc-survey-v1";
+  var st = {role:null, agree:false, lpc:new Array(18).fill(0), m:{}, n:{}, step:0};
+  try{ var saved = JSON.parse(localStorage.getItem(KEY)||"null"); if(saved && !location.hash) st = Object.assign(st, saved); }catch(e){}
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+
+  // steps: 0 intro, 1 guide1, 2..19 items, 20 guide2, 21..23 sit, 24 done
+  var TOTAL = 24;
+  var $ = function(id){return document.getElementById(id)};
+  function show(id){ document.querySelectorAll(".screen").forEach(function(s){s.classList.toggle("on", s.id===id)}); window.scrollTo(0,0); }
+  function toast(t){ var e=$("toast"); e.textContent=t; e.classList.add("on"); setTimeout(function(){e.classList.remove("on")},1600); }
+
+  function encode(){
+    var sit = SIT.map(function(s){return st.m[s.k]}).join("") + SIT.map(function(s){return st.n[s.k]}).join("");
+    var d = new Date(); var ts = d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0")+String(d.getHours()).padStart(2,"0")+String(d.getMinutes()).padStart(2,"0");
+    return "r=v1-"+st.role+"-"+st.lpc.join("")+"-"+sit+"-"+ts;
+  }
+
+  function render(){
+    var s = st.step, next=$("next"), back=$("back");
+    back.style.visibility = (s===0||s===24) ? "hidden" : "visible";
+    $("nav").style.display = (s===24) ? "none" : "flex";
+    $("prog").style.width = Math.round(s/TOTAL*100)+"%";
+    if(s===0){ show("s-intro"); $("stage").textContent="설문 안내"; $("count").textContent="";
+      document.querySelectorAll("[data-role]").forEach(function(b){b.classList.toggle("sel", b.dataset.role===st.role)});
+      $("agree").checked = st.agree; next.textContent="시작하기"; next.disabled = !(st.role && st.agree); }
+    else if(s===1){ show("s-guide1"); $("stage").textContent="1부 안내"; $("count").textContent=""; next.textContent="1부 시작"; next.disabled=false; }
+    else if(s>=2 && s<=19){
+      var i = s-2, it = ITEMS[i], rev = (i%2===1);
+      show("s-item"); $("stage").textContent="1부 · 직원 평가"; $("count").textContent=(i+1)+" / 18";
+      $("qnum").textContent = "문항 "+(i+1);
+      $("wl").textContent = rev ? it[1] : it[0]; $("wr").textContent = rev ? it[0] : it[1];
+      var sc=$("scale"); sc.innerHTML="";
+      for(var p=1;p<=8;p++){ (function(p){
+        var b=document.createElement("button"); b.textContent=p;
+        var stored = rev ? 9-p : p;
+        if(st.lpc[i]===stored) b.classList.add("sel");
+        b.onclick=function(){ st.lpc[i]=stored; save(); render(); setTimeout(function(){ if(st.step===s){ st.step++; save(); render(); } },220); };
+        sc.appendChild(b); })(p); }
+      next.textContent = (i===17) ? "1부 완료" : "다음"; next.disabled = !st.lpc[i];
+    }
+    else if(s===20){ show("s-guide2"); $("stage").textContent="2부 안내"; $("count").textContent=""; next.textContent="2부 시작"; next.disabled=false; }
+    else if(s>=21 && s<=23){
+      var j=s-21, q=SIT[j]; show("s-sit"); $("stage").textContent="2부 · 조직 상황"; $("count").textContent=(j+1)+" / 3";
+      $("snum").textContent="문항 "+(j+1); $("stitle").textContent=q.t; $("sdesc").textContent=q.d;
+      ["m","n"].forEach(function(w){ var box=$("sit-"+w); box.innerHTML="";
+        q.o.forEach(function(o){ var b=document.createElement("button"); b.className="opt"+(st[w][q.k]===o[0]?" sel":"");
+          b.innerHTML=o[1]+"<small>"+o[2]+"</small>"; b.onclick=function(){ st[w][q.k]=o[0]; save(); render(); }; box.appendChild(b); }); });
+      next.textContent = (j===2) ? "제출하고 결과 링크 받기" : "다음"; next.disabled = !(st.m[q.k] && st.n[q.k]);
+    }
+    else if(s===24){ show("s-done"); $("stage").textContent="완료"; $("count").textContent="";
+      var url = location.href.split("#")[0]+"#"+encode(); $("rlink").textContent=url; $("copy").dataset.url=url; }
+  }
+
+  document.querySelectorAll("[data-role]").forEach(function(b){ b.onclick=function(){ st.role=b.dataset.role; save(); render(); }; });
+  $("agree").onchange=function(e){ st.agree=e.target.checked; save(); render(); };
+  $("next").onclick=function(){ if(this.disabled) return; st.step=Math.min(TOTAL, st.step+1); save(); render(); };
+  $("back").onclick=function(){ st.step=Math.max(0, st.step-1); save(); render(); };
+  $("copy").onclick=function(){ var u=this.dataset.url;
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(u).then(function(){toast("링크를 복사했습니다")},function(){toast("주소를 길게 눌러 복사해 주세요")}); }
+    else toast("주소를 길게 눌러 복사해 주세요"); };
+  $("share").onclick=function(){ var u=$("copy").dataset.url;
+    if(navigator.share){ navigator.share({title:"리더십 설문 결과", text:"리더십 설문 응답 결과입니다.", url:u}).catch(function(){}); }
+    else $("copy").onclick(); };
+
+  // 결과 링크로 열었을 때: 연구자용 보기
+  function viewResult(h){
+    var m = /^r=v1-(CEO|COO)-([1-8]{18})-([GB][HL][SW][GB][HL][SW])-(\d{12})$/.exec(h);
+    $("hdr").style.display="none"; $("nav").style.display="none";
+    if(!m){ show("s-bad"); return; }
+    var sc = m[2].split("").map(Number), sum = sc.reduce(function(a,b){return a+b},0);
+    $("vtitle").textContent = m[1]+" 응답 · LPC 합계 "+sum+"점 (평균 "+(sum/18).toFixed(2)+")";
+    var t=m[4]; $("vtime").textContent = "응답 시각 "+t.slice(0,4)+"-"+t.slice(4,6)+"-"+t.slice(6,8)+" "+t.slice(8,10)+":"+t.slice(10,12);
+    var rows="<tr><th>#</th><th>형용사 짝 (1 → 8)</th><th>점수</th></tr>";
+    ITEMS.forEach(function(it,i){ rows+="<tr><td>"+(i+1)+"</td><td>"+it[0]+" → "+it[1]+"</td><td>"+sc[i]+"</td></tr>"; });
+    $("vlpc").innerHTML=rows;
+    var c=m[3], L={G:"좋음",B:"나쁨",H:"높음",L:"낮음",S:"강함",W:"약함"};
+    var r2="<tr><th>요인</th><th>합병 직후</th><th>현재</th></tr>";
+    SIT.forEach(function(q,i){ r2+="<tr><td>"+q.t+"</td><td>"+L[c[i]]+"</td><td>"+L[c[i+3]]+"</td></tr>"; });
+    $("vsit").innerHTML=r2; show("s-view");
+  }
+
+  var h = decodeURIComponent((location.hash||"").replace(/^#/,""));
+  if(h.indexOf("r=")===0) viewResult(h); else render();
+})();
+</script>
+</body>
+</html>
