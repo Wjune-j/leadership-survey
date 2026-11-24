@@ -179,9 +179,10 @@
       <h1>감사합니다!<br>마지막으로 결과 링크를 보내주세요</h1>
       <p>아래 버튼을 눌러 링크를 복사한 뒤, <b>카카오톡 등으로 설문을 요청드린 원우에게</b> 보내주시면 됩니다. 링크를 보내셔야 응답이 전달됩니다.</p>
       <button class="btn primary" id="copy" style="width:100%">결과 링크 복사하기</button>
-      <button class="btn ghost" id="share" style="width:100%;margin-top:10px;flex:none">공유하기 (카카오톡 등)</button>
-      <div class="result-link" id="rlink"></div>
-      <p class="muted">복사가 되지 않으면 위의 주소를 길게 눌러 복사해 주세요.</p>
+            <div class="result-link" id="rlink"></div>
+      <p class="muted">링크가 잘려서 전달될 경우를 대비해, 아래 <b>결과 코드</b>도 함께 보내주시면 더 확실합니다.</p>
+      <div class="result-link" id="rcode" style="font-size:15px;color:var(--ink);font-weight:600;letter-spacing:.02em"></div>
+      <button class="btn ghost" id="copycode" style="width:100%;flex:none">결과 코드 복사하기</button>
     </section>
 
     <!-- 6. 결과 보기 (연구자용) -->
@@ -229,7 +230,7 @@
   ];
   var KEY = "lpc-survey-v1";
   var st = {role:null, agree:false, lpc:new Array(18).fill(0), m:{}, n:{}, step:0};
-  try{ var saved = JSON.parse(localStorage.getItem(KEY)||"null"); if(saved && !location.hash) st = Object.assign(st, saved); }catch(e){}
+  try{ var saved = JSON.parse(localStorage.getItem(KEY)||"null"); if(saved && !location.hash && !location.search) st = Object.assign(st, saved); }catch(e){}
   function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
 
   // steps: 0 intro, 1 guide1, 2..19 items, 20 guide2, 21..23 sit, 24 done
@@ -241,7 +242,7 @@
   function encode(){
     var sit = SIT.map(function(s){return st.m[s.k]}).join("") + SIT.map(function(s){return st.n[s.k]}).join("");
     var d = new Date(); var ts = d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0")+String(d.getHours()).padStart(2,"0")+String(d.getMinutes()).padStart(2,"0");
-    return "r=v1-"+st.role+"-"+st.lpc.join("")+"-"+sit+"-"+ts;
+    return "v1-"+st.role+"-"+st.lpc.join("")+"-"+sit+"-"+ts;
   }
 
   function render(){
@@ -277,7 +278,7 @@
       next.textContent = (j===2) ? "제출하고 결과 링크 받기" : "다음"; next.disabled = !(st.m[q.k] && st.n[q.k]);
     }
     else if(s===24){ show("s-done"); $("stage").textContent="완료"; $("count").textContent="";
-      var url = location.href.split("#")[0]+"#"+encode(); $("rlink").textContent=url; $("copy").dataset.url=url; }
+      var code = encode(); var url = location.origin+location.pathname+"?r="+code; $("rlink").textContent=url; $("copy").dataset.url=url; $("rcode").textContent=code; $("copycode").dataset.code=code; }
   }
 
   document.querySelectorAll("[data-role]").forEach(function(b){ b.onclick=function(){ st.role=b.dataset.role; save(); render(); }; });
@@ -287,13 +288,13 @@
   $("copy").onclick=function(){ var u=this.dataset.url;
     if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(u).then(function(){toast("링크를 복사했습니다")},function(){toast("주소를 길게 눌러 복사해 주세요")}); }
     else toast("주소를 길게 눌러 복사해 주세요"); };
-  $("share").onclick=function(){ var u=$("copy").dataset.url;
-    if(navigator.share){ navigator.share({title:"리더십 설문 결과", text:"리더십 설문 응답 결과입니다.", url:u}).catch(function(){}); }
-    else $("copy").onclick(); };
+  $("copycode").onclick=function(){ var c=this.dataset.code;
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(c).then(function(){toast("결과 코드를 복사했습니다")},function(){toast("코드를 길게 눌러 복사해 주세요")}); }
+    else toast("코드를 길게 눌러 복사해 주세요"); };
 
   // 결과 링크로 열었을 때: 연구자용 보기
   function viewResult(h){
-    var m = /^r=v1-(CEO|COO)-([1-8]{18})-([GB][HL][SW][GB][HL][SW])-(\d{12})$/.exec(h);
+    var m = /^v1-(CEO|COO)-([1-8]{18})-([GB][HL][SW][GB][HL][SW])-(\d{12})$/.exec(h);
     $("hdr").style.display="none"; $("nav").style.display="none";
     if(!m){ show("s-bad"); return; }
     var sc = m[2].split("").map(Number), sum = sc.reduce(function(a,b){return a+b},0);
@@ -308,8 +309,11 @@
     $("vsit").innerHTML=r2; show("s-view");
   }
 
+  var q = new URLSearchParams(location.search).get("r");
   var h = decodeURIComponent((location.hash||"").replace(/^#/,""));
-  if(h.indexOf("r=")===0) viewResult(h); else render();
+  if(q) viewResult(q.trim());
+  else if(h.indexOf("r=")===0) viewResult(h.slice(2));
+  else render();
 })();
 </script>
 </body>
