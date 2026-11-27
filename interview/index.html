@@ -41,6 +41,13 @@
   .out{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:13px;white-space:pre-wrap;color:var(--sub);max-height:260px;overflow:auto;margin:10px 0}
   .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:20px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}.toast.on{opacity:.92}
   .saved{font-size:12.5px;color:var(--sub);text-align:right;margin-top:-4px}
+  .sub .sl{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .req{color:#B4472F;font-weight:700}
+  .mic{flex:none;border:1.5px solid var(--accent);background:#fff;color:var(--accent);border-radius:20px;padding:5px 11px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer}
+  .mic.on{background:#B4472F;border-color:#B4472F;color:#fff}
+  .live{font-size:13px;color:var(--sub);margin-top:6px}
+  textarea.miss{border-color:#B4472F;background:#FDF3F0}
+  .q.qmiss{border-color:#B4472F;box-shadow:0 0 0 2px #F6D9D1}
 </style>
 </head>
 <body>
@@ -63,20 +70,20 @@ var S = [
    {id:"a4", roles:BOTH, type:"nums", label:"인원", fields:[["현재 인원","명"],["인력 정리 후 새로 뽑기 시작한 뒤 입사한 인원","명"],["그중 이미 퇴사한 인원","명"]], help:"모르시는 칸은 비워두셔도 됩니다."}
  ]},
  {id:"B", title:"합병 직후의 회사", why:"합병 직후 경영진이 어떤 조건에서 일을 시작했는지 이해하고 싶습니다.", qs:[
-   {id:"b1", roles:CEO, type:"choice", label:"합병 직후, 구성원들은 새 경영진을 대체로 어떻게 받아들였나요?", opts:["적극적으로 협조했다","관망했다","소극적으로 따르지 않았다","공개적으로 반발했다"], reason:"그렇게 느끼신 장면이 있다면 한 줄로"},
-   {id:"b2", roles:BOTH, type:"choice", label:"당시 경영진이 실제로 결정하고 실행할 수 있었던 권한은 어느 정도였나요?", opts:["대부분 결정하고 실행할 수 있었다","일부 제약이 있었다","제약이 많았다","거의 결정하기 어려웠다"], reason:"결정이 막히거나 뒤집혔던 일이 있었다면, 무엇이 왜 그랬는지"},
-   {id:"b3", roles:CEO, type:"choice", label:"당시 구성원들의 업무 방식과 규칙은 어느 정도 정해져 있었나요?", opts:["대부분 정해져 있었다","일부만 정해져 있었다","거의 없이 그때그때 판단했다"], reason:"예를 하나 들어주신다면"}
+   {id:"b1", roles:CEO, type:"choice", label:"합병 직후, 구성원들은 새 경영진을 대체로 어떻게 받아들였나요?", opts:["적극적으로 협조했다","관망했다","소극적으로 따르지 않았다","공개적으로 반발했다"], reason:"그렇게 느끼신 장면을 한두 문장으로"},
+   {id:"b2", roles:BOTH, type:"choice", label:"당시 경영진이 실제로 결정하고 실행할 수 있었던 권한은 어느 정도였나요?", opts:["대부분 결정하고 실행할 수 있었다","일부 제약이 있었다","제약이 많았다","거의 결정하기 어려웠다"], reason:"결정이 막히거나 뒤집혔던 일, 또는 그렇게 보신 이유"},
+   {id:"b3", roles:CEO, type:"choice", label:"당시 구성원들의 업무 방식과 규칙은 어느 정도 정해져 있었나요?", opts:["대부분 정해져 있었다","일부만 정해져 있었다","거의 없이 그때그때 판단했다"], reason:"예를 하나 들어주세요"}
  ]},
  {id:"C", title:"운영 방식을 바꾼 시기", why:"큰 변화를 결정하실 때의 고민과, 그 과정에서 회사가 얻고 잃은 것을 듣고 싶습니다. 정답이나 평가는 없습니다.", qs:[
    {id:"c1", roles:CEO, type:"choice", label:"운영 방식을 정할 때, 대표님이 처음 생각하신 방향은 무엇에 가까웠나요?", opts:["규칙과 통제를 먼저 세운다","구성원과의 관계와 설득을 먼저 한다","두 가지를 함께 한다"], reason:"최종적으로 지금의 방식을 택하신 이유"},
-   {id:"c2", roles:CEO, type:"choice", label:"그 과정에서 많은 분이 회사를 떠났습니다. 이를 어떻게 보시나요?", opts:["어느 정도 의도하고 감수한 결과였다","예상은 했지만 의도한 것은 아니었다","예상하지 못했다"]},
+   {id:"c2", roles:CEO, type:"choice", label:"그 과정에서 많은 분이 회사를 떠났습니다. 이를 어떻게 보시나요?", opts:["어느 정도 의도하고 감수한 결과였다","예상은 했지만 의도한 것은 아니었다","예상하지 못했다"], reason:"그렇게 보시는 이유"},
    {id:"c3", roles:CEO, type:"pair", label:"그 시기를 돌아보면", fields:["회사가 얻은 것","회사가 잃은 것"]},
-   {id:"c4", roles:BOTH, type:"multi", label:"당시 구성원을 설득하거나 배려하기 위해 하신 일이 있다면 모두 골라주세요.", opts:["1:1 면담","변화의 이유를 설명하는 자리","새 규칙에 적응할 시간을 주거나 예외를 둠","월급·복지 등 대우를 조정함","특별히 없었다","기타"], reason:"가장 효과가 있었던 것 또는 없었던 것"}
+   {id:"c4", roles:BOTH, type:"multi", label:"당시 구성원을 설득하거나 배려하기 위해 하신 일이 있다면 모두 골라주세요.", opts:["1:1 면담","변화의 이유를 설명하는 자리","새 규칙에 적응할 시간을 주거나 예외를 둠","월급·복지 등 대우를 조정함","특별히 없었다","기타"], reason:"가장 효과가 있었던 것 또는 없었던 것과 그 이유"}
  ]},
  {id:"D", title:"새로 사람을 뽑을 때", why:"지금의 팀을 어떤 기준으로 만들었는지 이해하고 싶습니다.", qs:[
-   {id:"d1", roles:CEO, type:"multi", max:3, label:"채용할 때 가장 중요하게 보시는 것을 최대 3개까지 골라주세요.", opts:["문제를 해결해 본 경험","문제를 회사·환경 탓으로 돌리지 않는 태도","자사 서비스를 실제로 쓰는지","반려동물에 대한 애정","성격 유형(MBTI 등)","직무 경력과 역량","기존 팀과 잘 맞을지","기타"]},
+   {id:"d1", roles:CEO, type:"multi", max:3, label:"채용할 때 가장 중요하게 보시는 것을 최대 3개까지 골라주세요.", opts:["문제를 해결해 본 경험","문제를 회사·환경 탓으로 돌리지 않는 태도","자사 서비스를 실제로 쓰는지","반려동물에 대한 애정","성격 유형(MBTI 등)","직무 경력과 역량","기존 팀과 잘 맞을지","기타"], reason:"이 중 가장 중요한 하나를 고른다면 무엇이고, 왜인가요?"},
    {id:"d2", roles:BOTH, type:"choice", label:"채용 과정에서 성격 유형(MBTI 등)은 어떻게 쓰이나요?", opts:["합격·불합격을 가르는 기준으로 쓴다","참고 정보로만 본다","쓰지 않는다"], reason:"그렇게 쓰시는 이유"},
-   {id:"d3", roles:CEO, type:"text", label:"기대와 달랐던 채용 사례가 있다면 들려주세요.", ph:"예: 면접에서는 ○○해 보였는데 실제로는 …"}
+   {id:"d3", roles:CEO, type:"text", label:"기대와 달랐던 채용 사례가 있다면 들려주세요.", ph:"예: 면접에서는 ○○해 보였는데 실제로는 … (없으면 '없음')"}
  ]},
  {id:"E", title:"최근 1년의 장면들", why:"리더십은 구체적인 장면에서 가장 잘 드러납니다. 짧게라도 실제 있었던 일로 적어주시면 큰 도움이 됩니다.", qs:[
    {id:"e1", roles:BOTH, type:"incident", label:"최근 1년 사이 가장 힘들었던 일 하나"},
@@ -85,16 +92,16 @@ var S = [
  {id:"F", title:"주문 취소 건과 두 리더의 역할", why:"같은 일을 어떻게 기억하고 계신지, 그리고 두 분이 어떻게 역할을 나누시는지 여쭙습니다.", qs:[
    {id:"f1", roles:CEO, type:"text", label:"공동구매 주문이 전부 취소됐던 일을 어떻게 기억하시나요? 그때 대표님은 무엇을 중요하게 보셨나요?", ph:"앞에서 이미 적으셨다면 짧게 보태셔도 됩니다."},
    {id:"f2", roles:BOTH, type:"choice", label:"그 일 직후 구성원들의 분위기와 행동은 어땠나요?", opts:["책임감과 열의가 강하게 드러났다","긴장하거나 눈치를 보는 분위기였다","두 가지가 섞여 있었다","잘 모르겠다"], reason:"그렇게 보신 장면이나 이유"},
-   {id:"f3", roles:BOTH, type:"choice", label:"대표님과 COO님의 판단이 다를 때는 주로 어떻게 정리되나요?", opts:["주로 대표가 결정한다","주로 COO가 결정한다","영역을 나눠 각자 결정한다","논의해서 합의한다","그때그때 다르다"], reason:"판단이 갈렸던 다른 사례가 있다면 한 줄로"}
+   {id:"f3", roles:BOTH, type:"choice", label:"대표님과 COO님의 판단이 다를 때는 주로 어떻게 정리되나요?", opts:["주로 대표가 결정한다","주로 COO가 결정한다","영역을 나눠 각자 결정한다","논의해서 합의한다","그때그때 다르다"], reason:"판단이 갈렸던 다른 사례를 한두 문장으로 (없으면 '없음')"}
  ]},
  {id:"G", title:"지금, 그리고 앞으로", why:"회사가 지금 어떤 단계에 와 있고, 앞으로 어떤 리더십이 필요하다고 보시는지 듣고 싶습니다.", qs:[
    {id:"g1", roles:BOTH, type:"choice", label:"지금 구성원들에게 가장 필요한 것은 무엇이라고 보시나요?", opts:["명확한 지시와 기준","관심과 지지","의견을 묻고 결정에 참여시키는 것","도전적인 목표와 성장 기회"], reason:"그렇게 보시는 이유"},
    {id:"g2", roles:BOTH, type:"choice", label:"합병 초기와 비교해, 지금의 리더십 방식은 달라져야 할까요?", opts:["지금 방식 그대로가 맞다","조금 달라져야 한다","많이 달라져야 한다"], reason:"어떤 점이 그렇다고 보시나요?"},
-   {id:"g3", roles:BOTH, type:"choice", label:"구성원이 의견이나 제안을 내는 자리는 어느 정도 있나요?", opts:["정기적으로 있다","가끔 있다","거의 없다"], reason:"최근 받아들여진 제안이 있다면 예시로"}
+   {id:"g3", roles:BOTH, type:"choice", label:"구성원이 의견이나 제안을 내는 자리는 어느 정도 있나요?", opts:["정기적으로 있다","가끔 있다","거의 없다"], reason:"최근 받아들여진 제안의 예 (없으면 '없음')"}
  ]},
  {id:"H", title:"마무리", why:"거의 다 왔습니다. 마지막으로 저희가 제안하려는 아이디어에 대한 의견을 여쭙습니다.", qs:[
-   {id:"h1", roles:BOTH, type:"choice", label:"저희 제안을 하나 드립니다. 다음에 사고가 생기면 1~2주 동안 아래처럼 역할을 나눠 보는 것은 어떠세요?", help:"① 무엇이 잘못됐는지 확인하는 일은 COO님 ② 직원들에게 상황을 설명하고 다독이는 말은 대표님 ③ 다시 생기지 않게 할 방법은 직원들 의견을 들어 함께 정하기", opts:["해볼 만하다","조건에 따라 가능하다","어렵다"], reason:"의견이나 조건이 있다면"},
-   {id:"h2", roles:BOTH, type:"text", label:"저희가 묻지 않았지만 꼭 하고 싶은 이야기가 있다면 적어주세요.", ph:"선택 사항입니다."},
+   {id:"h1", roles:BOTH, type:"choice", label:"저희 제안을 하나 드립니다. 다음에 사고가 생기면 1~2주 동안 아래처럼 역할을 나눠 보는 것은 어떠세요?", help:"① 무엇이 잘못됐는지 확인하는 일은 COO님 ② 직원들에게 상황을 설명하고 다독이는 말은 대표님 ③ 다시 생기지 않게 할 방법은 직원들 의견을 들어 함께 정하기", opts:["해볼 만하다","조건에 따라 가능하다","어렵다"], reason:"그렇게 보시는 이유나 조건"},
+   {id:"h2", roles:BOTH, type:"text", label:"저희가 묻지 않았지만 꼭 하고 싶은 이야기가 있다면 적어주세요.", ph:"없으시면 '없음'이라고 적어주세요."},
    {id:"h3", roles:BOTH, type:"choice", label:"몇 가지만 짧게 여쭙는 5~10분 확인 통화가 가능하다면, 편하신 시간대는요?", opts:["평일 점심","평일 저녁","주말","메시지로 답하는 게 편하다"]}
  ]}
 ];
@@ -115,24 +122,52 @@ function intro(){
   '<li>저희 과제는 수업에서 배운 리더십 이론(리더가 사람을 이끄는 방식에 대한 연구)이 실제 회사에서 <b>어디까지 들어맞고, 어디서 다르게 나타나는지</b>를 살펴보는 것입니다.</li>'+
   '<li>그래서 결과뿐 아니라 <b>그때 어떤 상황이었고, 왜 그렇게 결정하셨는지</b>가 필요합니다.</li>'+
   '<li>두 분께 일부 같은 질문을 드리는 것은 확인이 아니라, <b>자리마다 다르게 보이는 모습</b>을 함께 담기 위해서입니다.</li></ul></div>'+
-  '<div class="card"><h3>이렇게 답해주시면 가장 좋습니다 (약 15~20분)</h3><ul>'+
-  '<li>대부분은 <b>선택 + 한 줄 이유</b>입니다. 이유는 짧아도 충분합니다.</li>'+
+  '<div class="card"><h3>이렇게 답해주시면 가장 좋습니다 (약 15~25분)</h3><ul>'+
+  '<li>대부분은 <b>선택 + 한두 문장 설명</b>입니다. 고르신 이유를 들어야 저희가 정확히 이해할 수 있어 <b>설명 칸은 모두 필수(*)</b>입니다.</li>'+
   '<li>"보통 ○○합니다"보다 <b>"그때 ○○한 일이 있었는데, 이렇게 했다"</b>처럼 실제 장면으로 적어주시면 큰 도움이 됩니다.</li>'+
-  '<li>휴대폰 키보드의 <b>마이크 버튼</b>으로 말하듯 입력하셔도 됩니다. 맞춤법은 신경 쓰지 않으셔도 됩니다.</li>'+
-  '<li>답하기 어려운 문항은 <b>비워두고 넘어가셔도</b> 됩니다.</li>'+
+  ''+(SR?'<li>각 칸의 <b>🎤 말로 입력</b> 버튼을 누르고 말씀하시면 <b>글자로 바로 받아써집니다</b>. 화면에서 확인하고 고칠 수 있고, 맞춤법은 신경 쓰지 않으셔도 됩니다. 녹음 파일은 만들어지지 않으며, 받아쓰기는 휴대폰 브라우저(구글·애플)의 음성 인식 기능으로 처리됩니다.</li>':'<li>휴대폰 키보드의 <b>마이크 버튼</b>으로 말하듯 입력하시면 훨씬 편합니다. 맞춤법은 신경 쓰지 않으셔도 됩니다.</li>')+''+
+  '<li>해당하는 일이 없으면 <b>“없음”</b>이라고 적어주세요. 날짜·인원 칸만 모르시면 비워두셔도 됩니다.</li>'+
   '<li>중간에 멈춰도 같은 휴대폰에서 다시 열면 이어서 쓸 수 있습니다.</li></ul></div>'+
   '<div class="card"><h3>약속드립니다</h3><ul>'+
   '<li>응답은 과제 분석에만 쓰며, 보고서에는 회사와 두 분 모두 <b>가명</b>(\'P사\', \'현 CEO\', \'현 COO\')으로만 표기합니다.</li>'+
   '<li>한 분의 답을 다른 분께 전달하지 않습니다.</li>'+
   '<li>응답은 어디에도 저장되지 않으며, 마지막 화면에서 <b>복사해 보내주셔야만</b> 저희에게 전달됩니다.</li>'+
   '<li>답변 중 2~3가지만 짧은 통화로 보충해서 여쭐 수 있습니다.</li></ul></div>'+
-  '<div class="note">가능하시면 <b>11월 28일(토) 밤까지</b> 보내주시면 감사하겠습니다.</div>'+
+  (/KAKAOTALK|NAVER|Instagram|FBAN|FBAV/i.test(navigator.userAgent)?'<div class="note">앱 안의 브라우저에서는 🎤 말로 입력이 안 될 수 있습니다. 화면 오른쪽 위 메뉴에서 <b>다른 브라우저(Chrome·Safari)로 열기</b>를 누르시면 편하게 쓰실 수 있습니다.</div>':'')+'<div class="note">가능하시면 <b>11월 28일(토) 밤까지</b> 보내주시면 감사하겠습니다.</div>'+
   '<h2 style="margin-top:18px">응답하시는 분을 선택해 주세요</h2>'+
   '<div class="roles"><button class="opt'+(st.role==="CEO"?" sel":"")+'" data-role="CEO">대표 (CEO)</button><button class="opt'+(st.role==="COO"?" sel":"")+'" data-role="COO">COO</button></div>'+
-  '<p class="muted" style="margin-top:6px">대표님은 약 20분, COO님은 지난 인터뷰 내용을 제외해 약 12분 걸립니다.</p>'+
+  '<p class="muted" style="margin-top:6px">대표님은 약 25분, COO님은 지난 인터뷰 내용을 제외해 약 15분 걸립니다.</p>'+
   '<label class="check"><input type="checkbox" id="agree"'+(st.agree?" checked":"")+'> 위 안내를 읽었고, 서면 인터뷰에 참여하겠습니다.</label>';
 }
 
+var SR = window.SpeechRecognition || window.webkitSpeechRecognition, rec=null, recT=null;
+function lab(t){ return '<div class="sl"><span>'+t+' <b class="req">*</b></span>'+(SR?'<button type="button" class="mic">🎤 말로 입력</button>':'')+'</div>'; }
+function stopRec(){ if(rec){ try{rec.stop();}catch(e){} } }
+function startRec(btn, ta){
+  if(rec){ var same = recT===ta; stopRec(); if(same) return; }
+  rec = new SR(); rec.lang="ko-KR"; rec.interimResults=true; rec.continuous=true; recT=ta;
+  var base = ta.value ? ta.value.replace(/\s*$/," ") : "", fin="";
+  var live = document.createElement("div"); live.className="live"; ta.parentNode.appendChild(live);
+  btn.classList.add("on"); btn.textContent="■ 듣는 중 · 누르면 멈춤";
+  rec.onresult=function(e){ var interim=""; for(var i=e.resultIndex;i<e.results.length;i++){ var t=e.results[i][0].transcript; if(e.results[i].isFinal) fin+=t+" "; else interim+=t; }
+    ta.value=(base+fin).replace(/\s+$/,""); live.textContent=interim?("받아쓰는 중: "+interim):""; st.a[ta.dataset.t]=ta.value; save(); ta.classList.remove("miss"); };
+  rec.onerror=function(e){ if(e.error==="not-allowed"||e.error==="service-not-allowed") toast("마이크 권한이 필요합니다. 키보드의 마이크 버튼을 이용해 주세요"); };
+  rec.onend=function(){ btn.classList.remove("on"); btn.textContent="🎤 말로 입력"; if(live.parentNode) live.parentNode.removeChild(live); if(recT===ta){rec=null;recT=null;} };
+  try{ rec.start(); }catch(e){ toast("음성 입력을 시작할 수 없습니다"); }
+}
+function missing(sec){
+  var out=[], a=st.a;
+  qsOf(sec).forEach(function(q){
+    var need=[];
+    if(q.type==="choice") { if(!a[q.id]) need.push(q.id); if(q.reason) need.push(q.id+"_r"); }
+    else if(q.type==="multi"){ if(!(a[q.id]||[]).length) need.push(q.id); if(q.reason) need.push(q.id+"_r"); }
+    else if(q.type==="text") need.push(q.id);
+    else if(q.type==="pair") q.fields.forEach(function(f,i){need.push(q.id+"_"+i)});
+    else if(q.type==="incident") [0,1,2,3].forEach(function(i){need.push(q.id+"_"+i)});
+    need.forEach(function(k){ var v=a[k]; var ok = (k===q.id && (q.type==="choice"||q.type==="multi")) ? (Array.isArray(v)? v.length : !!v) : (v && String(v).trim().length>0); if(!ok) out.push({q:q.id,k:k}); });
+  });
+  return out;
+}
 function qHTML(q,n){
   var a=st.a, h='<div class="q" data-q="'+q.id+'"><div class="lab"><span class="num">'+n+'.</span>'+esc(q.label)+'</div>';
   if(q.help) h+='<div class="help">'+esc(q.help)+'</div>';
@@ -141,18 +176,18 @@ function qHTML(q,n){
     h+='<div class="opts">'; var v=a[q.id];
     q.opts.forEach(function(o,i){var sel=q.type==="choice"? v===o : (v||[]).indexOf(o)>=0; h+='<button class="opt'+(sel?" sel":"")+'" data-pick="'+q.id+'" data-i="'+i+'">'+esc(o)+'</button>';});
     h+='</div>';
-    if(q.reason) h+='<div class="sub"><div class="sl">'+esc(q.reason)+' (선택)</div><textarea data-t="'+q.id+'_r" rows="2" placeholder="한 줄이면 충분합니다">'+esc(a[q.id+"_r"]||"")+'</textarea></div>';
+    if(q.reason) h+='<div class="sub">'+lab(esc(q.reason))+'<textarea data-t="'+q.id+'_r" rows="2" placeholder="한두 문장이면 충분합니다">'+esc(a[q.id+"_r"]||"")+'</textarea></div>';
   } else if(q.type==="text"){
-    h+='<textarea data-t="'+q.id+'" placeholder="'+esc(q.ph||"")+'">'+esc(a[q.id]||"")+'</textarea>';
+    h+='<div class="sub" style="margin-top:0">'+lab('답변')+'<textarea data-t="'+q.id+'" placeholder="'+esc(q.ph||"")+'">'+esc(a[q.id]||"")+'</textarea></div>';
   } else if(q.type==="month"){
     h+='<input type="month" data-t="'+q.id+'" value="'+esc(a[q.id]||"")+'">';
   } else if(q.type==="nums"){
     q.fields.forEach(function(f,i){h+='<div class="sub"><div class="sl">'+esc(f[0])+'</div><div class="unit"><input type="number" inputmode="numeric" min="0" data-t="'+q.id+'_'+i+'" value="'+esc(a[q.id+"_"+i]||"")+'"><span>'+f[1]+'</span></div></div>';});
   } else if(q.type==="pair"){
-    q.fields.forEach(function(f,i){h+='<div class="sub"><div class="sl">'+esc(f)+'</div><textarea data-t="'+q.id+'_'+i+'" rows="2">'+esc(a[q.id+"_"+i]||"")+'</textarea></div>';});
+    q.fields.forEach(function(f,i){h+='<div class="sub">'+lab(esc(f))+'<textarea data-t="'+q.id+'_'+i+'" rows="2">'+esc(a[q.id+"_"+i]||"")+'</textarea></div>';});
   } else if(q.type==="incident"){
     var F=[["무슨 일이 있었나요?","예: ○월에 ○○ 문제가 생겨서 …"],["그때 어떻게 대응하셨나요?","예: 바로 ○○를 소집해서 …"],["왜 그렇게 하셨나요?","그 순간 가장 중요하다고 본 것"],["결과와 구성원들의 반응은 어땠나요?",""]];
-    F.forEach(function(f,i){h+='<div class="sub"><div class="sl">'+f[0]+'</div><textarea data-t="'+q.id+'_'+i+'" rows="2" placeholder="'+esc(f[1])+'">'+esc(a[q.id+"_"+i]||"")+'</textarea></div>';});
+    F.forEach(function(f,i){h+='<div class="sub">'+lab(f[0])+'<textarea data-t="'+q.id+'_'+i+'" rows="2" placeholder="'+esc(f[1])+'">'+esc(a[q.id+"_"+i]||"")+'</textarea></div>';});
   }
   return h+'</div>';
 }
@@ -178,7 +213,8 @@ function build(){
       else { var arr=st.a[q.id]||[], j=arr.indexOf(o); if(j>=0) arr.splice(j,1); else { if(q.max&&arr.length>=q.max){toast("최대 "+q.max+"개까지 고를 수 있습니다");return;} arr.push(o);} st.a[q.id]=arr; }
       save(); var y=window.scrollY; build(); window.scrollTo(0,y);
     }});
-    main.querySelectorAll("[data-t]").forEach(function(t){t.oninput=function(){st.a[t.dataset.t]=t.value;save();}});
+    main.querySelectorAll("[data-t]").forEach(function(t){t.oninput=function(){st.a[t.dataset.t]=t.value;t.classList.remove("miss");save();}});
+    main.querySelectorAll(".mic").forEach(function(b){ b.onclick=function(){ var ta=b.closest(".sub").querySelector("textarea"); startRec(b, ta); }; });
   } else {
     $("stage").textContent="완료"; $("count").textContent="";
     var txt=report();
@@ -213,8 +249,13 @@ function report(){
   return out.join("\n");
 }
 
-$("next").onclick=function(){ if(this.disabled) return; st.step++; save(); build(); window.scrollTo(0,0); };
-$("back").onclick=function(){ st.step=Math.max(0,st.step-1); save(); build(); window.scrollTo(0,0); };
+$("next").onclick=function(){ if(this.disabled) return; stopRec();
+  var L=secs(); if(st.step>=1 && st.step<=L.length){ var m=missing(L[st.step-1]);
+    if(m.length){ var first=null; document.querySelectorAll(".q").forEach(function(e){e.classList.remove("qmiss")});
+      m.forEach(function(x){ var el=document.querySelector('[data-t="'+x.k+'"]'); if(el){ el.classList.add("miss"); first=first||el; } else { var qe=document.querySelector('[data-q="'+x.q+'"]'); if(qe){ qe.classList.add("qmiss"); first=first||qe; } } });
+      toast("아직 작성하지 않은 칸이 "+m.length+"개 있습니다"); if(first) first.scrollIntoView({behavior:"smooth",block:"center"}); return; } }
+  st.step++; save(); build(); window.scrollTo(0,0); };
+$("back").onclick=function(){ stopRec(); st.step=Math.max(0,st.step-1); save(); build(); window.scrollTo(0,0); };
 build();
 })();
 </script>
